@@ -1,7 +1,7 @@
 <?php
 
 /* Replace with your email address here */
-$mailto  = 'info@ravelweb.com';
+$mailto  = 'alan.balbo@gmail.com';
 
 $name     	= strip_tags($_POST['name']);
 $sub     	= strip_tags($_POST['subject']);
