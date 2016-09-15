@@ -56,15 +56,15 @@
                 || location.hostname == this.hostname) {
 
                 var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-                if (target.length) {
-                    $('html,body').animate({
-                        scrollTop: target.offset().top - 32
-                    }, 1000);
-                    return false;
-                }
+            target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+            if (target.length) {
+                $('html,body').animate({
+                    scrollTop: target.offset().top - 32
+                }, 1000);
+                return false;
             }
-        });
+        }
+    });
 
 
 
@@ -176,8 +176,8 @@
 
         /* =============== Back To Top =============== */
         var offset = 300,
-            scroll_top_duration = 700,
-            $back_to_top = $('.back-to-top');
+        scroll_top_duration = 700,
+        $back_to_top = $('.back-to-top');
         $(window).scroll(function(){
             ( $(this).scrollTop() > offset ) ? $back_to_top.addClass('back-to-top-is-visible') : $back_to_top.removeClass('back-to-top-is-visible');
         });
@@ -186,8 +186,8 @@
         $back_to_top.on('click', function(event){
             event.preventDefault();
             $('body,html').animate({
-                    scrollTop: 0 ,
-                }, scroll_top_duration
+                scrollTop: 0 ,
+            }, scroll_top_duration
             );
         });
 
@@ -198,48 +198,27 @@
             e.preventDefault(); //Prevents default submit
             var form = $(this);
             $("#submit").attr('disabled', 'disabled'); //Disable the submit button on click
-            var post_data = form.serialize(); //Serialized the form data
-
-            $.ajax({
-                    type: 'POST',
-                    url: 'email-php/mail_handler.php', // Form script
-                    data: post_data
-                })
-                .done(function () {
-
-                    // Get the snackbar DIV
-                    var x = document.getElementById("snackbar");
-                    // Add the "show" class to DIV
-                    x.className = "show";
-                    // After 3 seconds, remove the show class from DIV
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-
-                    $("form#contact-form")[0].reset();
-                    Materialize.updateTextFields(); // Rest floating labels
-                    $("#submit").removeAttr('disabled', 'disabled'); // Enable submit button
-
-                })
-                .fail(function () {
-
-                    // Get the fail-snackbar DIV
-                    var y = document.getElementById("fail-snackbar");
-                    // Add the "show" class to DIV
-                    y.className = "show";
-                    // After 3 seconds, remove the show class from DIV
-                    setTimeout(function(){ y.className = y.className.replace("show", ""); }, 3000);
-
-                    $("form#contact-form")[0].reset();
-                    Materialize.updateTextFields(); // Rest floating labels
-                    $("#submit").removeAttr('disabled', 'disabled'); // Enable submit button
-                });
+            var data = form.serializeArray().reduce(function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+            if (data.name && data.subject && data.message) {
+                $(location).attr('href', 'mailto:alan.balbo@gmail.com?subject='
+                             + encodeURIComponent(data.subject + ' de ' + data.name)
+                             + "&body=" 
+                             + encodeURIComponent(data.message)
+                );
+            }
+      
         });
-        
-    });
 
 
-    
-    /* =============== Portfolio Filterizr Initialize =============== */
-    $(function() {
+});
+
+
+
+/* =============== Portfolio Filterizr Initialize =============== */
+$(function() {
         //Initialize filterizr with default options
         $('.filtr-container').filterizr();
 
